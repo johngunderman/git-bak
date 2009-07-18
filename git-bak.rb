@@ -27,15 +27,25 @@ VER = 0.1
 VERSION_STRING = "git-bak v#{VER}"
 HELP_STRING = "Help for #{VERSION_STRING}\n
 Options:
-\tinit -- initialize new backup for the current directory
+\tinit [path-to-backup] -- initialize new backup at [path-to-backup] 
+\t\tfor the current directory. If called with no arguments, 
+\t\tstarts an interactive setup for the backup.
 \t[--help | -h] -- print out this helful help message
 \t[--version | -v] -- print out the version of this git-bak
 \t[backup | bak] -- create a manual backup now."
 
 
 def init_dir
+  path_to_backup = ARGV[1].to_s
   # try to make a git repo in the specified backup dir
-  # make a link to the repo from the current dir
+  if with_error_check{`git --git-dir=#{path_to_backup}/.git init` if path_to_backup != ""}
+    # make a link to the repo from the current dir
+    if with_error_check{`ln -s #{path_to_backup}/.git/ ./.git`}
+      puts "Successfully initialized this directory under git-bak"
+      puts msg
+    end
+  end
+  # TODO: handle if the path name ends in a / or not.
   # write config info to current dir
   # .gitignore?
   # cron job?
@@ -51,7 +61,17 @@ def perform_backup
 end
 
 
-
+# catches errors during execution of git statements.
+# returns false on error, true if no error
+def with_error_check
+  msg = yield
+  if msg[0,5] == "fatal"
+    puts "Error:"
+    return false
+  end
+  puts msg
+  return true
+end
 
 
 
