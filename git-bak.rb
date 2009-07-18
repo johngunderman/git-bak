@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+
+#!/usr/bin/env ruby
 
 # Author: John Gunderman
 # Date: July 17, 2009
@@ -22,4 +23,35 @@
 # All of the git command set is available in any directory using git-bak.
 
 
+VER = 0.1
+VERSION_STRING = "git-bak v#{VER}"
+
+
+
+# go through the argvs
+
+# if init
+# promp for backup dir
+# assume this dir to back up
+# prompt for set time to backup
+
+# if --help | -h
+# print out options
+if ARGV[0].to_s == "--help" or ARGV[0].to_s == "-h" and ARGV.size == 1
+  puts "Help is on the way!"
+  # TODO
+end
+
+
+# if --version | -v
+# print out version info
+if ARGV[0].to_s == "--version" or ARGV[0].to_s == "-v" and ARGV.size == 1
+  puts VERSION_STRING
+end
+
+# if backup
+# perform a git-commit
+
+# if restore
+# prompt for dir to restore to
 
