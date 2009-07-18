@@ -30,19 +30,27 @@ Options:
 \tinit [path-to-backup] -- initialize new backup at [path-to-backup] 
 \t\tfor the current directory. If called with no arguments, 
 \t\tstarts an interactive setup for the backup.
+
 \t[--help | -h] -- print out this helful help message
+
 \t[--version | -v] -- print out the version of this git-bak
-\t[backup | bak] -- create a manual backup now."
+
+\t[backup | bak] -- create a manual backup now.
+
+\trestore [location-of-backup] -- restore your backup into the
+\t\tcurrent directory from the specified backup repository."
 
 
 def init_dir
   path_to_backup = ARGV[1].to_s
   # try to make a git repo in the specified backup dir
-  if with_error_check{`git --git-dir=#{path_to_backup}/.git init` if path_to_backup != ""}
+  command = "git --git-dir=#{path_to_backup}"
+  command += '/' if path_to_backup[path_to_backup.size - 1] != '/'
+  command += ".git init"
+  if with_error_check{`#{command}`}
     # make a link to the repo from the current dir
     if with_error_check{`ln -s #{path_to_backup}/.git/ ./.git`}
       puts "Successfully initialized this directory under git-bak"
-      puts msg
     end
   end
   # TODO: handle if the path name ends in a / or not.
@@ -53,9 +61,20 @@ end
 
 def restore_backup
   # checkout the specified repo to the specified dir
+  # TODO: This does needs to work better if we are simply restoring
+  # to a previous version, not an entire repo copy.
+  path_to_backup = ARGV[1].to_s
+  if with_error_check{`git clone #{path_to_backup}`}
+    puts "Successfully restored from backup!"
+  end
 end
 
 def perform_backup
+  if with_error_check{`git add .`}
+    if with_error_check{`git commit -m "Manual Backup"`}
+      puts "Backup Successful!"
+    end
+  end
   # add everything new
   # commit with a standard message
 end
@@ -65,8 +84,9 @@ end
 # returns false on error, true if no error
 def with_error_check
   msg = yield
-  if msg[0,5] == "fatal"
+  if msg.to_s[0,5] == "fatal"
     puts "Error:"
+    puts msg
     return false
   end
   puts msg
