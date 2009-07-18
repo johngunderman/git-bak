@@ -25,6 +25,34 @@
 
 VER = 0.1
 VERSION_STRING = "git-bak v#{VER}"
+HELP_STRING = "Help for #{VERSION_STRING}\n
+Options:
+\tinit -- initialize new backup for the current directory
+\t[--help | -h] -- print out this helful help message
+\t[--version | -v] -- print out the version of this git-bak
+\t[backup | bak] -- create a manual backup now."
+
+
+def init_dir
+  # try to make a git repo in the specified backup dir
+  # make a link to the repo from the current dir
+  # write config info to current dir
+  # .gitignore?
+  # cron job?
+end
+
+def restore_backup
+  # checkout the specified repo to the specified dir
+end
+
+def perform_backup
+  # add everything new
+  # commit with a standard message
+end
+
+
+
+
 
 
 
@@ -34,24 +62,40 @@ VERSION_STRING = "git-bak v#{VER}"
 # promp for backup dir
 # assume this dir to back up
 # prompt for set time to backup
+if ARGV[0].to_s == "init"
+  init_dir
+end
 
 # if --help | -h
-# print out options
 if ARGV[0].to_s == "--help" or ARGV[0].to_s == "-h" and ARGV.size == 1
-  puts "Help is on the way!"
+  puts HELP_STRING
   # TODO
 end
 
 
 # if --version | -v
-# print out version info
 if ARGV[0].to_s == "--version" or ARGV[0].to_s == "-v" and ARGV.size == 1
   puts VERSION_STRING
 end
 
 # if backup
 # perform a git-commit
+# print out options
+if ARGV[0].to_s == "backup" or ARGV[0].to_s == "bak"
+  perform_backup
+end
 
 # if restore
 # prompt for dir to restore to
+if ARGV[0].to_s == "restore"
+  restore_backup
+end
 
+if ARGV.size == 0
+  puts HELP_STRING
+end
+
+
+#case ARGV[0].to_s
+#when "--help"
+  
