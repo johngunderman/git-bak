@@ -1,0 +1,24 @@
+git-bak
+=======
+
+git-bak is a simple backup solution based on git. 
+
+However, unlike git repositories, the repo can be located at any user specified location, not just the tracked repository.
+
+At the moment, the only supported features are the creation of a git-bak repo and manual backups. restoring from a git-bak repo is partially up, It works if we are restoring into a blank directory, not if we are reverting to a previous version. However, git-bak supports all git commands.
+
+
+TODO list:
+
+* Interactive prompt upon setting up git-bak repo.
+  This should set up a cronjob for automatic backups,
+  and should allow for the user to set up a .gitignore file
+  for backups. An automatic rebase operation should also be optional
+  (to compress older commits).
+
+* git-bak restore should allow for the user to revert to a previous backup.
+
+* Other features which I have yet to decide on.
+
+
+Please let me know if you have any suggestions or find any bugs.
